@@ -1,0 +1,6 @@
+.DS_Store
+public
+functions
+.firebaserc
+database.rules.json
+firebase.json
