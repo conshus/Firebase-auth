@@ -1,4 +1,3 @@
-let intialposting = 0;
 $( "#loginSubmit" ).click(function() {
   let email = $("#loginEmail").val();
   let password = $("#loginPassword").val();
