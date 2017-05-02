@@ -1,3 +1,22 @@
 #signOutButton {
   display:none;
 }
+#chat{
+  display:none;
+  height:90vh;
+}
+#chatMessagesArea{
+  height:60vh;
+}
+.lineThrough {
+    text-decoration:line-through;
+}
+#errors{
+
+}
+#chatArea{
+  margin-bottom: 0;
+}
+#chatInput{
+  margin:0;
+}
