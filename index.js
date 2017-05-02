@@ -64,6 +64,12 @@ function getRandomInt(min, max) {
 
 firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
+    //load initial messages
+    firebase.database().ref('chat/').on('value',function(snapshot){
+      snapshot.forEach(function(childSnapshot){
+        postChat(childSnapshot);
+      });
+    });
     $("#signOutButton").show();
     $("#chat").show();
     $("#loginSignUpForm").hide();
