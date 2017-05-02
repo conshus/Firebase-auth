@@ -1,42 +1,35 @@
+let intialposting = 0;
 $( "#loginSubmit" ).click(function() {
-  //console.log("login submit clicked");
   let email = $("#loginEmail").val();
   let password = $("#loginPassword").val();
-  //console.log(email,password);
   firebase.auth().signInWithEmailAndPassword(email, password)
     .catch(function(error) {
     // Handle Errors here.
     var errorCode = error.code;
     var errorMessage = error.message;
     if (errorCode === 'auth/wrong-password') {
-      alert('Wrong password.');
-      $("#errors").html(errorMessage)
-
+      //alert('Wrong password.');
+      $("#errors").html(errorMessage+", meow")
     } else {
-      alert(errorMessage);
-      $("#errors").html(errorMessage)
-
+      //alert(errorMessage);
+      $("#errors").html(errorMessage+", meow")
     }
     console.log(error);
   })
   .then(user => user.getToken())
-  //.then(user.getToken())
   .then(JWT => console.log("JWT:",JWT))
 });
-
-
 
 $( "#signUpSubmit" ).click(function() {
   //console.log("sign up submit clicked");
   let email = $("#signUpEmail").val();
   let password = $("#signUpPassword").val();
-  //console.log(email,password);
   firebase.auth().createUserWithEmailAndPassword(email, password)
   .catch(function(error) {
     // Handle Errors here.
     var errorCode = error.code;
     var errorMessage = error.message;
-    $("#errors").html(errorMessage)
+    $("#errors").html(errorMessage+", meow")
     // ...
   })
   .then(function(user){
@@ -46,74 +39,68 @@ $( "#signUpSubmit" ).click(function() {
 });
 
 $("#signOutButton").click(function(){
-  //console.log("sign out button clicked");
+  $("#loginEmail").val('');
+  $("#loginPassword").val('');
+  $("#signUpEmail").val('');
+  $("#signUpPassword").val('');
   firebase.auth().signOut();
 })
 
 function postChat(data){
-  console.log(data.key);
-  let val = data.val();
-  console.log(val.text);
+  if($("#" + data.key).length == 0) {
+    let val = data.val();
+    var container = document.createElement('div');
+    container.innerHTML = "<div><p class='chip'>"+val.message+"</p><h6>"+val.email+"</h6></div>";
+    div = container.firstChild;
+    div.setAttribute('id', data.key);
+      $( "#chatMessagesArea" ).append(div);
+  }
 }
 
-// $("#chatButton").click(function(){
-//   let chatMessage = $("#chatInput").val();
-//   console.log(chatMessage.length);
-//   let chatRef = firebase.database().ref('chat');
-//   chatRef.off();
-//   chatRef.on('child_added',postChat);
-//   chatRef.on('child_changed',postChat);
-//   if (chatMessage.length >0){
-//     console.log("chat button pressed");
-//     chatRef.push({
-//       name: 'test',
-//       text: chatMessage
-//     }).then(function(){
-//       $("#chatInput").html('');
-//     })
-//   }
-// })
-//
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
 firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
     $("#signOutButton").show();
     $("#chat").show();
     $("#loginSignUpForm").hide();
-    console.log(user);
-
-
-
     $("#chatButton").click(function(){
       let chatMessage = $("#chatInput").val();
-      console.log(chatMessage.length);
       let chatRef = firebase.database().ref('chat');
       chatRef.off();
       chatRef.on('child_added',postChat);
       chatRef.on('child_changed',postChat);
       if (chatMessage.length >0){
-        console.log("chat button pressed");
         chatRef.push({
-          name: user.email,
-          text: chatMessage
+          email: user.email,
+          message: chatMessage
         }).then(function(){
           $("#chatInput").val('');
+          setTimeout(function(){
+            let punctuation = ['.','?','!']
+            let meowNum = getRandomInt(0,5);
+            let punRand = getRandomInt(0,2);
+            let meowassage = "meow";
+            for (i=0; i<meowNum; i++){
+              meowassage = meowassage + " meow";
+            }
+            meowassage = meowassage+punctuation[punRand];
+            chatRef.push({
+              email: 'me@ow.zzz',
+              message: meowassage
+            })
+          }, 3000);
         })
       }
     })
-
-
-
-
-    //console.log("logged in", user);
-    //user.getToken().then(JWT => console.log("JWT:", JWT))
-    // User is signed in.
   } else {
     // No user is signed in.
-    //console.log("not logged in");
     $("#chat").hide();
     $("#loginSignUpForm").show();
     $("#signOutButton").hide();
-
   }
 });

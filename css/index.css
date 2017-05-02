@@ -7,16 +7,23 @@
 }
 #chatMessagesArea{
   height:60vh;
+  overflow-y: auto;
 }
 .lineThrough {
     text-decoration:line-through;
 }
 #errors{
-
+  padding-top:2vh;
 }
 #chatArea{
   margin-bottom: 0;
 }
 #chatInput{
   margin:0;
+}
+.row {
+  margin-bottom:0;
+}
+.card-content{
+  padding:12px !important;
 }
