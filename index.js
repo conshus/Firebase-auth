@@ -8,14 +8,19 @@ $( "#loginSubmit" ).click(function() {
     var errorMessage = error.message;
     if (errorCode === 'auth/wrong-password') {
       //alert('Wrong password.');
-      $("#errors").html(errorMessage+", meow")
+      $("#errors").html(errorMessage+", meow").fadeIn().delay(2000).fadeOut(2000)
     } else {
       //alert(errorMessage);
-      $("#errors").html(errorMessage+", meow")
+      $("#errors").html(errorMessage+", meow").fadeIn().delay(2000).fadeOut(2000)
     }
     console.log(error);
   })
-  .then(user => user.getToken())
+  //.then(user => user.getToken())
+  .then(function(user){
+    if (user){
+      user.getToken()
+    }
+  })
   .then(JWT => console.log("JWT:",JWT))
 });
 
@@ -28,11 +33,13 @@ $( "#signUpSubmit" ).click(function() {
     // Handle Errors here.
     var errorCode = error.code;
     var errorMessage = error.message;
-    $("#errors").html(errorMessage+", meow")
+    $("#errors").html(errorMessage+", meow").fadeIn().delay(2000).fadeOut(2000)
     // ...
   })
   .then(function(user){
-    console.log("UID:",user.uid);
+    if (user){
+      console.log("UID:",user.uid);
+    }
   });
 
 });
@@ -104,6 +111,7 @@ firebase.auth().onAuthStateChanged(function(user) {
     })
   } else {
     // No user is signed in.
+    $("#errors").html("")
     $("#chat").hide();
     $("#loginSignUpForm").show();
     $("#signOutButton").hide();
